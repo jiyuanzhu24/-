@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+   <h1>Welcome to Garden Craft</h1>
+    <form id="loginForm" action="/login" method="POST">
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+    
+        const username = document.querySelector('input[name="username"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+    
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+    
+        const data = await response.json();
+    
+        if (data.success) {
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('token', data.token); // 保存令牌
+            window.location.href = '/index3.html'; // 登录成功后跳转到 index3.html
+        } else {
+            alert(data.message);
+        }
+    });
+</script>
